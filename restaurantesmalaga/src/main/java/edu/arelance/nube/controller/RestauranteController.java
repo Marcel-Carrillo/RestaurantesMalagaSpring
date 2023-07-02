@@ -238,5 +238,21 @@ public class RestauranteController {
 
 		return responseEntity;
 	}
+	
+	// Consultar todos lo barrios. Metodo GET a http://localhost:8081/restaurante/barrios/
+		@GetMapping("/barrios/")
+		public ResponseEntity<?> obtenerListadoBarrios() {
+
+			ResponseEntity<?> responseEntity = null;
+
+			List<String> lista_barrios = null;
+
+			lista_barrios = this.restauranteService.cuantosBarriosHay();
+
+			responseEntity = ResponseEntity.ok(lista_barrios);
+
+			return responseEntity;
+		}
+	
 
 }

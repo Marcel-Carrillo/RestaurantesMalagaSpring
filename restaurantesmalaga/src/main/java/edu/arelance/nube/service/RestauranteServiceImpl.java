@@ -1,5 +1,6 @@
 package edu.arelance.nube.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
@@ -86,6 +87,15 @@ public class RestauranteServiceImpl implements RestauranteService {
 		listaRestPalabra = this.restauranteRepository.buscarPorBarrioNombreOEspecialida(clave);
 		
 		return listaRestPalabra;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<String> cuantosBarriosHay() {
+		List<String> listaBarrios = null;
+		listaBarrios = this.restauranteRepository.cuantosBarriosHay();
+		
+		return listaBarrios;
 	}
 
 }

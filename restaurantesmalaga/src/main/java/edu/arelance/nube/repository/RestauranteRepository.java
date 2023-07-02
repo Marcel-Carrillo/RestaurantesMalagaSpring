@@ -1,5 +1,7 @@
 package edu.arelance.nube.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -21,10 +23,20 @@ public interface RestauranteRepository extends CrudRepository<Restaurante, Long>
 	
 	
 	//2 JPQL - HQL - Pseudo SQL pero de JAVA - "Agnostico"
+	
+	
 	//3 NATIVAS -SQL
 	
 	@Query(value = "SELECT * FROM bdrestaurantes.restaurantes WHERE barrio LIKE %?1% OR nombre LIKE %?1% OR especialidad1 LIKE %?1% OR especialidad2 LIKE %?1% OR especialidad3 LIKE %?1%", nativeQuery = true)
 	Iterable<Restaurante> buscarPorBarrioNombreOEspecialida (String clave);
+	
+	@Query(value = "SELECT DISTINCT barrio from restaurantes", nativeQuery = true)
+	List<String> cuantosBarriosHay();
+	
+	
+	
 	//4 STORED PROCEDURES - Procedimientos Almacenados
+	
+	
 	//5 CRITERIA API - SQL pero con metodos de JAVA https://www.arquitecturajava.com/jpa-criteria-api-un-enfoque-diferente
 }
