@@ -21,13 +21,13 @@ public class Restaurante {
 	@Id // Indico a spring que este sera la clave primaria
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // autoInc en MySQL
 	private Long id;
-	
+
 	@NotEmpty
-	private String nombre;//
-	
+	private String nombre;
+
 	@NotEmpty
 	private String direccion;
-	
+
 	@NotEmpty
 	private String barrio;
 

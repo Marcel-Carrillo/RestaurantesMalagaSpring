@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -51,6 +52,9 @@ public class RestauranteController {
 
 	@Autowired
 	RestauranteService restauranteService;
+	
+	@Autowired
+	Environment enviroment; //voy a sacar la info del puerto 
 
 	Logger logger = LoggerFactory.getLogger(RestauranteController.class);
 
@@ -73,6 +77,8 @@ public class RestauranteController {
 		ResponseEntity<?> responseEntity = null;
 
 		Iterable<Restaurante> lista_restaurantes = null;
+		
+		logger.debug("Atendido por el puerto" + enviroment.getProperty("local.server.port"));
 
 		lista_restaurantes = this.restauranteService.consultarTodos();
 
@@ -135,44 +141,38 @@ public class RestauranteController {
 
 		return responseEntity;
 	}
-	
-	private ResponseEntity<?> generarRespuestaErroresValidacion(BindingResult bindingResult){
+
+	private ResponseEntity<?> generarRespuestaErroresValidacion(BindingResult bindingResult) {
 		ResponseEntity<?> responseEntity = null;
 		List<ObjectError> listaErrores = null;
-		
+
 		listaErrores = bindingResult.getAllErrors();
-		//imprimir los errores por el log
+		// imprimir los errores por el log
 		listaErrores.forEach(e -> logger.error(e.toString()));
-		
+
 		responseEntity = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(listaErrores);
-		
+
 		return responseEntity;
 	}
 
 	/*
-	 *   @PutMapping("/{id}")
-	public ResponseEntity<?> modificarRestaurante(@Valid @RequestBody Restaurante restaurante, @PathVariable Long id, BindingResult bindingResult) {
-
-		ResponseEntity<?> responseEntity = null;
-		Optional<Restaurante> opRest = null;
-		if (bindingResult.hasErrors()) {
-			logger.debug("Error en la entrada al PUT");
-			responseEntity = generarRespuestaDeErroresValidacion(bindingResult);
-
-		} else {
-			logger.debug("SIN Error en la entrada al PUT");
-			opRest = this.restauranteService.modificarRestaurante(id, restaurante);
-			if (opRest.isPresent()) {
-				Restaurante rm = opRest.get(); //rm -> restaurante modificado que nos llega del service
-				responseEntity = ResponseEntity.ok(rm);
-			} else {
-				responseEntity = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-			}
-		}
-		return responseEntity;
-	}
+	 * @PutMapping("/{id}") public ResponseEntity<?>
+	 * modificarRestaurante(@Valid @RequestBody Restaurante
+	 * restaurante, @PathVariable Long id, BindingResult bindingResult) {
+	 * 
+	 * ResponseEntity<?> responseEntity = null; Optional<Restaurante> opRest = null;
+	 * if (bindingResult.hasErrors()) { logger.debug("Error en la entrada al PUT");
+	 * responseEntity = generarRespuestaDeErroresValidacion(bindingResult);
+	 * 
+	 * } else { logger.debug("SIN Error en la entrada al PUT"); opRest =
+	 * this.restauranteService.modificarRestaurante(id, restaurante); if
+	 * (opRest.isPresent()) { Restaurante rm = opRest.get(); //rm -> restaurante
+	 * modificado que nos llega del service responseEntity = ResponseEntity.ok(rm);
+	 * } else { responseEntity =
+	 * ResponseEntity.status(HttpStatus.NOT_FOUND).build(); } } return
+	 * responseEntity; }
 	 */
-	
+
 	// Put modifica en la base de datos 1 rest
 	@PutMapping("/{id}")
 	public ResponseEntity<?> modificarRestaurante(@Valid @RequestBody Restaurante restaurante, @PathVariable Long id,
@@ -238,21 +238,21 @@ public class RestauranteController {
 
 		return responseEntity;
 	}
-	
-	// Consultar todos lo barrios. Metodo GET a http://localhost:8081/restaurante/barrios/
-		@GetMapping("/barrios/")
-		public ResponseEntity<?> obtenerListadoBarrios() {
 
-			ResponseEntity<?> responseEntity = null;
+	// Consultar todos lo barrios. Metodo GET a
+	// http://localhost:8081/restaurante/barrios
+	@GetMapping("/barrios")
+	public ResponseEntity<?> obtenerListadoBarrios() {
 
-			List<String> lista_barrios = null;
+		ResponseEntity<?> responseEntity = null;
 
-			lista_barrios = this.restauranteService.cuantosBarriosHay();
+		List<String> lista_barrios = null;
 
-			responseEntity = ResponseEntity.ok(lista_barrios);
+		lista_barrios = this.restauranteService.cuantosBarriosHay();
 
-			return responseEntity;
-		}
-	
+		responseEntity = ResponseEntity.ok(lista_barrios);
+
+		return responseEntity;
+	}
 
 }

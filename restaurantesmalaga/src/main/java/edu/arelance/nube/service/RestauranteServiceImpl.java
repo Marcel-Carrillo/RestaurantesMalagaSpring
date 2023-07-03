@@ -47,36 +47,40 @@ public class RestauranteServiceImpl implements RestauranteService {
 	@Transactional
 	public Optional<Restaurante> modificarRestaurante(Long id, Restaurante restaurante) {
 		Optional<Restaurante> opRest = Optional.empty();
-		//1 Leer
+		// 1 Leer
 		opRest = this.restauranteRepository.findById(id);
-		if(opRest.isPresent()) {
-			//Al estar dentro de una transaccion, restauranteLeido esta asociado a un registro de la tabla,
-			//si modifico un campo estoy modificando la columna asociada (Estado Persistent- (estandar) JPA)
-		Restaurante restauranteLeido = opRest.get();
-		//restauranteLeido.setNombre(restaurante.getNombre());
-		BeanUtils.copyProperties(restaurante, restauranteLeido, "id","creadoEn");
-		opRest = Optional.of(restauranteLeido); //Relleno el optional
+		if (opRest.isPresent()) {
+			// Al estar dentro de una transaccion, restauranteLeido esta asociado a un
+			// registro de la tabla,
+			// si modifico un campo estoy modificando la columna asociada (Estado
+			// Persistent- (estandar) JPA)
+			Restaurante restauranteLeido = opRest.get();
+			// restauranteLeido.setNombre(restaurante.getNombre());
+			BeanUtils.copyProperties(restaurante, restauranteLeido, "id", "creadoEn");
+			opRest = Optional.of(restauranteLeido); // Relleno el optional
 		}
-		//2 Actualizar
-		
+		// 2 Actualizar
+
 		return opRest;
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
-	public Iterable<Restaurante> findByPrecioMedioBetween(int precioMin, int precioMax){
+	public Iterable<Restaurante> findByPrecioMedioBetween(int precioMin, int precioMax) {
 		Iterable<Restaurante> listaRestaPorPrecio = null;
 		listaRestaPorPrecio = this.restauranteRepository.findByPrecioMedioBetween(precioMin, precioMax);
-		
+
 		return listaRestaPorPrecio;
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public Iterable<Restaurante> buscarRestaurantePorPalabra(String palabraBuscada1,String palabraBuscada2,String palabraBuscada3) {
+	public Iterable<Restaurante> buscarRestaurantePorPalabra(String palabraBuscada1, String palabraBuscada2,
+			String palabraBuscada3) {
 		Iterable<Restaurante> listaRestPalabra = null;
-		listaRestPalabra = this.restauranteRepository.findByNombreOrBarrioOrEspecialidad1IgnoreCase(palabraBuscada1,palabraBuscada2,palabraBuscada3);
-		
+		listaRestPalabra = this.restauranteRepository.findByNombreOrBarrioOrEspecialidad1IgnoreCase(palabraBuscada1,
+				palabraBuscada2, palabraBuscada3);
+
 		return listaRestPalabra;
 	}
 
@@ -85,7 +89,7 @@ public class RestauranteServiceImpl implements RestauranteService {
 	public Iterable<Restaurante> buscarRestaurantePorClave(String clave) {
 		Iterable<Restaurante> listaRestPalabra = null;
 		listaRestPalabra = this.restauranteRepository.buscarPorBarrioNombreOEspecialida(clave);
-		
+
 		return listaRestPalabra;
 	}
 
@@ -94,7 +98,7 @@ public class RestauranteServiceImpl implements RestauranteService {
 	public List<String> cuantosBarriosHay() {
 		List<String> listaBarrios = null;
 		listaBarrios = this.restauranteRepository.cuantosBarriosHay();
-		
+
 		return listaBarrios;
 	}
 
