@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.arelance.nube.dto.FraseChuckNorris;
 import edu.arelance.nube.repository.entity.Restaurante;
 import edu.arelance.nube.service.RestauranteService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -52,9 +53,9 @@ public class RestauranteController {
 
 	@Autowired
 	RestauranteService restauranteService;
-	
+
 	@Autowired
-	Environment enviroment; //voy a sacar la info del puerto 
+	Environment enviroment; // voy a sacar la info del puerto
 
 	Logger logger = LoggerFactory.getLogger(RestauranteController.class);
 
@@ -77,7 +78,7 @@ public class RestauranteController {
 		ResponseEntity<?> responseEntity = null;
 
 		Iterable<Restaurante> lista_restaurantes = null;
-		
+
 		logger.debug("Atendido por el puerto" + enviroment.getProperty("local.server.port"));
 
 		lista_restaurantes = this.restauranteService.consultarTodos();
@@ -175,8 +176,8 @@ public class RestauranteController {
 
 	// Put modifica en la base de datos 1 rest
 	@PutMapping("/{id}")
-	public ResponseEntity<?> modificarRestaurante(@Valid @RequestBody Restaurante restaurante, @PathVariable Long id,
-			BindingResult bindingResult) {
+	public ResponseEntity<?> modificarRestaurante(@Valid @RequestBody Restaurante restaurante,
+			BindingResult bindingResult, @PathVariable Long id) {
 		ResponseEntity<?> responseEntity = null;
 		Optional<Restaurante> opRest = null;
 
@@ -251,6 +252,23 @@ public class RestauranteController {
 		lista_barrios = this.restauranteService.cuantosBarriosHay();
 
 		responseEntity = ResponseEntity.ok(lista_barrios);
+
+		return responseEntity;
+	}
+
+	@GetMapping("/frase")
+	public ResponseEntity<?> obtenerFrase() {
+		ResponseEntity<?> responseEntity = null;
+		Optional<FraseChuckNorris> frase = null;
+
+		frase = this.restauranteService.obtenerFraseChuckNurris();
+		if (frase.isPresent()) {
+
+			FraseChuckNorris laFrase = frase.get();
+			responseEntity = ResponseEntity.ok(laFrase);
+		} else {
+			responseEntity = ResponseEntity.noContent().build();
+		}
 
 		return responseEntity;
 	}
