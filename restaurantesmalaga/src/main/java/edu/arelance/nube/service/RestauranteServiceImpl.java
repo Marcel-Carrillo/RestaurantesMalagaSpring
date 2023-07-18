@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -12,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import edu.arelance.nube.dto.FraseChuckNorris;
 import edu.arelance.nube.repository.RestauranteRepository;
 import edu.arelance.nube.repository.entity.Restaurante;
+import net.bytebuddy.asm.Advice.OffsetMapping.Target.ForArray.ReadOnly;
 
 @Service
 public class RestauranteServiceImpl implements RestauranteService {
@@ -74,6 +77,16 @@ public class RestauranteServiceImpl implements RestauranteService {
 
 		return listaRestaPorPrecio;
 	}
+	
+	//buscar por precio paginado
+	@Override
+	@Transactional(readOnly = true)
+	public Page<Restaurante> buscarPorPrecioPaginado(int precioMin, int precioMax, Pageable pageable) {
+		Iterable<Restaurante> listaRestaPorPrecio = null;
+		listaRestaPorPrecio = this.restauranteRepository.findByPrecioMedioBetween(precioMin, precioMax, pageable);
+		
+		return (Page<Restaurante>) listaRestaPorPrecio;
+	}
 
 	@Override
 	@Transactional(readOnly = true)
@@ -114,6 +127,13 @@ public class RestauranteServiceImpl implements RestauranteService {
 		opChuck = Optional.of(fraseChuckNorris);
 
 		return opChuck;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Page<Restaurante> consultarPorPagina(Pageable pageable) {
+		
+		return this.restauranteRepository.findAll(pageable);
 	}
 
 }

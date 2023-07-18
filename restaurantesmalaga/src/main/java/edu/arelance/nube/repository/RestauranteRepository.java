@@ -2,19 +2,25 @@ package edu.arelance.nube.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import edu.arelance.nube.repository.entity.Restaurante;
 
 @Repository
-public interface RestauranteRepository extends CrudRepository<Restaurante, Long> {
+public interface RestauranteRepository extends PagingAndSortingRepository<Restaurante, Long> {
+//	public interface RestauranteRepository extends CrudRepository<Restaurante, Long> {
 
 	// 1 KEY WORDL QUERIES - CONSULTAS POR PALABRAS CLAVE
 	// obtener restaurantes en un rango de precio
 
 	Iterable<Restaurante> findByPrecioMedioBetween(int precioMin, int precioMax);
+	
+	Page<Restaurante> findByPrecioMedioBetween (int precioMin, int precioMax , Pageable pageable);
 
 	// Iterable<Restaurante>
 	// findByNombreOrBarrioOrEspecialidad1OrEspecialidad2OrEspecialidad3IgnoreCase

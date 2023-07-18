@@ -3,6 +3,9 @@ package edu.arelance.nube.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import edu.arelance.nube.dto.FraseChuckNorris;
 import edu.arelance.nube.repository.entity.Restaurante;
 
@@ -31,5 +34,10 @@ public interface RestauranteService {
 	List<String> cuantosBarriosHay();
 	
 	Optional<FraseChuckNorris> obtenerFraseChuckNurris();
+	
+	Page <Restaurante> consultarPorPagina(Pageable pageable);
+	
+    Page <Restaurante> buscarPorPrecioPaginado(int precioMin, int precioMax, Pageable pageable); 
+
 
 }
