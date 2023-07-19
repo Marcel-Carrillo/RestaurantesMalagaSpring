@@ -7,13 +7,25 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+/**
+ * SIGNIFICADO DE LA CLASE
+ * FECHA
+ * VERSION
+ * @author MARCEL
+ *
+ */
+
 //Esta clase esta escuchando todas las excepciones de este paquete
 @RestControllerAdvice(basePackages = { "edu.arelance.nube" })
 public class GestionDeExcepciones {
 	
 	Logger logger = LoggerFactory.getLogger(GestionDeExcepciones.class);
 
-
+/**
+ * QUE RECIBO Y QUE SALE Y FUNCIONALIDAD (TAMBIEN PRECONDICIONES Y POSTCONDICIONES DE FUNCIONAMIENTO)
+ * @param e
+ * @return
+ */
 	// para cada tipo de excepcion / defino un metodo
 	@ExceptionHandler(StringIndexOutOfBoundsException.class)
 	public ResponseEntity<?> gestionStringOutIndexException(StringIndexOutOfBoundsException e) {
